@@ -1,5 +1,6 @@
 package com.scout.patient.ui.AppointmentBooking;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -11,6 +12,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -27,6 +32,8 @@ import com.scout.patient.ui.DoctorsActivity.DoctorsActivity;
 import com.scout.patient.ui.Hospital.HospitalActivity;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class BookAppointmentActivity extends AppCompatActivity implements View.OnClickListener ,Contract.View, DatePickerDialog.OnDateSetListener, ChipGroup.OnCheckedChangeListener{
+public class BookAppointmentActivity extends AppCompatActivity implements View.OnClickListener ,Contract.View, DatePickerDialog.OnDateSetListener, ChipGroup.OnCheckedChangeListener,PaymentResultListener {
     @BindView(R.id.textInputPatientName) TextInputLayout textInputPatientName;
     @BindView(R.id.cardDoctorInfo) CardView cardDoctorInfo;
     @BindView(R.id.text_doctor_name) TextView textInputDoctorName;
@@ -58,6 +65,13 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
     String selectedTime = null;
     DatePickerDialog datePickerDialog;
     ArrayList<ModelDateTime> partiallyUnavailableDates = new ArrayList<>();
+
+    String patientName="";
+    String doctorName="";
+    String age="";
+    String disease="";
+    String date="";
+    String paid="false";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,11 +199,12 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonBookAppointment :
-                String patientName = textInputPatientName.getEditText().getText().toString().trim();
-                String doctorName = textInputDoctorName.getText().toString().trim();
-                String disease = textInputDisease.getEditText().getText().toString().trim();
-                String age = textInputAge.getEditText().getText().toString().trim();
-                String date = textViewSelectDate.getText().toString().trim();
+
+                patientName = textInputPatientName.getEditText().getText().toString().trim();
+                doctorName = textInputDoctorName.getText().toString().trim();
+                disease = textInputDisease.getEditText().getText().toString().trim();
+                age = textInputAge.getEditText().getText().toString().trim();
+                date = textViewSelectDate.getText().toString().trim();
 
                 if (isValidData(patientName,disease,age)){
                     if(modelIntent.getDoctorProfileInfo()==null){
@@ -200,18 +215,27 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
                         HelperClass.toast(this, "Select Date and Time.");
                         return;
                     }
-                    HelperClass.showProgressbar(progressBar);
-                    String patientId = SharedPref.getLoginUserData(BookAppointmentActivity.this).getPatientId().getId();
-                    String doctorId = modelIntent.getDoctorProfileInfo().getDoctorId().getId();
-                    String hospitalId = modelIntent.getDoctorProfileInfo().getHospitalObjectId().getId();
-                    String hospitalName = modelIntent.getDoctorProfileInfo().getHospitalName();
-                    String avgCheckupTime = modelIntent.getDoctorProfileInfo().getAvgCheckupTime();
-                    long thresholdLimit = presenter.getThresholdLimit(selectedTime,avgCheckupTime);
 
-                    ModelBookAppointment appointment = new ModelBookAppointment(patientName, doctorName, hospitalName, disease, age, date,
-                            getString(R.string.pending), "", patientId, doctorId, hospitalId,selectedTime,thresholdLimit);
 
-                    presenter.bookAppointment( appointment);
+                    PaymentNow("1000");
+
+                    if(paid.equals("true")) {
+                        // t();
+                        HelperClass.showProgressbar(progressBar);
+                        String patientId = SharedPref.getLoginUserData(BookAppointmentActivity.this).getPatientId().getId();
+                        String doctorId = modelIntent.getDoctorProfileInfo().getDoctorId().getId();
+                        String hospitalId = modelIntent.getDoctorProfileInfo().getHospitalObjectId().getId();
+                        String hospitalName = modelIntent.getDoctorProfileInfo().getHospitalName();
+                        String avgCheckupTime = modelIntent.getDoctorProfileInfo().getAvgCheckupTime();
+                        long thresholdLimit = presenter.getThresholdLimit(selectedTime, avgCheckupTime);
+
+                        ModelBookAppointment appointment = new ModelBookAppointment(patientName, doctorName, hospitalName, disease, age, date,
+                                getString(R.string.pending), "", patientId, doctorId, hospitalId, selectedTime, thresholdLimit);
+
+
+                        presenter.bookAppointment(appointment);
+                    }
+
                 }
                 break;
 
@@ -223,6 +247,8 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
                 break;
         }
     }
+
+
 
     private boolean isValidData(String patientName, String disease, String age) {
         if (patientName.isEmpty()) {
@@ -356,4 +382,93 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
         HelperClass.hideProgressbar(progressBar);
         HelperClass.toast(this,message);
     }
+
+
+
+
+
+    private void PaymentNow(String amount) {
+
+        final Activity activity = this;
+
+
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_KTw816Gbln0tQd");
+        checkout.setImage(R.drawable.ic_launcher_foreground);
+
+        double finalAmount = Float.parseFloat(amount)*100;
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name","KUSHAL PAREEK");
+            options.put("description","Reference No. #123456");
+            options.put("image","https://s3.amazonaws.com/rzp-mobile/image/rzp.png");
+            options.put("theme.color","3399cc");
+            options.put("currency","INR");
+            options.put("final",finalAmount+"");
+            options.put("prefill.email","kushalpareek82@gmail.com");
+            options.put("prefill.contact","7340549069");
+
+            checkout.open(activity,options);
+
+
+        }catch (Exception e){
+            Log.e("TAG","Error in starting Razorpay checkout", e);
+        }
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+
+
+        Toast.makeText(getApplicationContext(),"Payment success",Toast.LENGTH_SHORT).show();
+
+        paid="true";
+
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+
+
+
+        Toast.makeText(getApplicationContext(),"Payment failed",Toast.LENGTH_SHORT).show();
+
+
+
+
+
+    }
+
+
+
+    private void appointmentFinish()
+    {
+        HelperClass.showProgressbar(progressBar);
+        String patientId = SharedPref.getLoginUserData(BookAppointmentActivity.this).getPatientId().getId();
+        String doctorId = modelIntent.getDoctorProfileInfo().getDoctorId().getId();
+        String hospitalId = modelIntent.getDoctorProfileInfo().getHospitalObjectId().getId();
+        String hospitalName = modelIntent.getDoctorProfileInfo().getHospitalName();
+        String avgCheckupTime = modelIntent.getDoctorProfileInfo().getAvgCheckupTime();
+        long thresholdLimit = presenter.getThresholdLimit(selectedTime,avgCheckupTime);
+
+        ModelBookAppointment appointment = new ModelBookAppointment(patientName, doctorName, hospitalName, disease, age, date,
+                getString(R.string.pending), "", patientId, doctorId, hospitalId,selectedTime,thresholdLimit);
+
+
+        presenter.bookAppointment( appointment);
+    }
+
+    private void t()
+    {
+        Toast.makeText(this,"HiHIHIHI",Toast.LENGTH_LONG).show();
+    }
+
+
+
+
+
+
+
+
 }

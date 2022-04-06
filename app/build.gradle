@@ -32,6 +32,13 @@ android {
     }
 
     compileOptions.incremental = false
+
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+
+
+    }
 }
 
 dependencies {
@@ -90,5 +97,11 @@ dependencies {
 
     //Facebook Login SDK (not Integrated yet)
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+
+    implementation 'com.razorpay:checkout:1.6.18'
+
+    //dialogFlow
+    implementation 'com.google.cloud:google-cloud-dialogflow:2.1.0'
+    implementation 'io.grpc:grpc-okhttp:1.30.0'
 
 }

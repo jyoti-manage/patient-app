@@ -5,5 +5,4 @@
         <item>@string/doctor</item>
         <item>@string/hospital</item>
     </string-array>
-    <string name="select">Select ..</string>
 </resources>

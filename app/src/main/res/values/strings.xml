@@ -1,16 +1,12 @@
 <resources>
-    <string name="my_app_id">patient_app-qjhgx</string>
 
     <string name="app_name">Patient</string>
-    <string name="welcome_text">Welcome to Dr. Scout</string>
-    <string name="loginInputIdHint">Email or Phone No</string>
     <string name="loginPassword">Password</string>
     <string name="patient_login">Login Your Account</string>
     <string name="login_using">OR Login Using</string>
     <string name="text_registration">Don\'t have Account?</string>
     <string name="signUp">SignUp</string>
     <string name="login">Login</string>
-    <string name="patient_registration">Register Yourself</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="phoneNo">Phone No.</string>
@@ -20,25 +16,16 @@
     <string name="weight">Weight(in Kg)</string>
     <string name="text_login">Already have a Account?</string>
     <string name="mendatory_field_text">* Mendatory Fields</string>
-    <string name="title_activity_base">BaseActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="welcome">Welcome</string>
     <string name="pref_for_user_data">Shared Preference For Loggedin User Data</string>
 
     <string name="startUp_name">Dr. Scout</string>
     <string name="description">You can Select a Doctor whose appointment you want to  book or can just visit their profile</string>
-    <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="appointment">Appointments</string>
-    <string name="prescriptions">Prescriptions</string>
-    <string name="notifications">Notifications</string>
+    <string name="Help">Notifications</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -51,7 +38,6 @@
 
     <string name="hospital">Hospital</string>
     <string name="doctor">Doctor</string>
-    <string name="take_ambulance">Ambulance</string>
     <string name="specialists">Specialists</string>
     <string name="appointment_for">Appointment For</string>
     <string name="symptoms">Symptoms</string>
@@ -63,16 +49,12 @@
     <string name="doctor_name">Doctor Name</string>
     <string name="patient_name">Patient Name</string>
     <string name="book_appointment">Book Appointment</string>
-    <string name="working_places">Working Places</string>
     <string name="career_history">Career History</string>
     <string name="learning_history">Learning History</string>
     <string name="contact_info">Contact Info</string>
-    <string name="select_doctor">Select Doctor</string>
-    <string name="doctor_info">Doctor Info</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="logout">Logout</string>
-    <string name="appointments">Appointments</string>
     <string name="search">Search</string>
     <string name="availability_type">Availability Type</string>
     <string name="availability_time">Availability Time</string>
@@ -80,7 +62,6 @@
     <string name="monthly">Monthly</string>
     <string name="checkup_time">"Average CheckUp Time (in min.) : "</string>
     <string name="doctor_activity_title">Check Our Doctors</string>
-    <string name="select_hospital">Select Hospital</string>
     <string name="hospital_doctor_info">Hospital/Doctor Information</string>
     <string name="consultation_with">Consultation With</string>
     <string name="your_serial_number">Your Serial Number :  </string>
@@ -108,7 +89,6 @@
     <string name="search_hospitals_by_name">Search Hospitals By Name</string>
     <string name="search_results_activity_title">Your Search Results..</string>
     <string name="search_doctors_hospitals_by_name">Search Hospitals or Doctors By Name</string>
-    <string name="clean_suggestion_history">Clean Suggestion History</string>
 
     <string name="text_enter_password_again">For Security Reasons You have to Entered Your Password Again.</string>
     <string name="authenticate">Authenticate</string>
